@@ -57,7 +57,7 @@
     </config-file>
     <source-file src="src/android/KaribooPlugin.java" target-dir="src/com/jointag/cordova"/>
     <framework src="src/android/Kariboo.gradle" custom="true" type="gradleReference"/>
-    <hook type="before_build" src="hooks/android.js"/>
-    <hook type="before_run" src="hooks/android.js"/>
+    <hook type="before_build" src="src/scripts/android.js"/>
+    <hook type="before_run" src="src/scripts/android.js"/>
   </platform>
 </plugin>
