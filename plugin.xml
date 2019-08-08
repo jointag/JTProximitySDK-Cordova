@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<plugin id="cordova-plugin-jointag-proximity" version="0.6.0" xmlns="http://apache.org/cordova/ns/plugins/1.0"
+<plugin id="cordova-plugin-jointag-proximity" version="0.7.0" xmlns="http://apache.org/cordova/ns/plugins/1.0"
         xmlns:android="http://schemas.android.com/apk/res/android">
   <name>cordova-plugin-jointag-proximity</name>
   <js-module name="Kariboo" src="www/cordova-plugin-jointag-proximity.js">
@@ -57,7 +57,7 @@
     </config-file>
     <source-file src="src/android/KaribooPlugin.java" target-dir="src/com/jointag/cordova"/>
     <framework src="src/android/Kariboo.gradle" custom="true" type="gradleReference"/>
-    <hook type="before_build" src="hooks/android.js"/>
-    <hook type="before_run" src="hooks/android.js"/>
+    <hook type="before_build" src="src/scripts/android.js"/>
+    <hook type="before_run" src="src/scripts/android.js"/>
   </platform>
 </plugin>
