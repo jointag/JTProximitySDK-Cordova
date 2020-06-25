@@ -31,6 +31,18 @@ Kariboo.getInstallationId(function (value) {
 });
 ```
 
+request permissions
+```javascript
+Kariboo.requestLocationPermission();
+```
+
+get location permissions
+```javascript
+Kariboo.getLocationPermission((res) => {
+	alert(`Permissions: ${res}`);
+});
+```
+
 ## Requirements and compatibility
 
 ### Cordova requirements

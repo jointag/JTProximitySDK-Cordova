@@ -19,6 +19,8 @@
 - (void)setIABConsentParsedPurposeConsents:(CDVInvokedUrlCommand*)command;
 - (void)setIABConsentParsedVendorConsents:(CDVInvokedUrlCommand*)command;
 - (void)getPreferences:(CDVInvokedUrlCommand*)command;
+- (void)requestLocationPermission:(CDVInvokedUrlCommand*)command;
+- (void)getLocationPermission:(CDVInvokedUrlCommand*)command;
 @end
 
 @implementation KaribooPlugin

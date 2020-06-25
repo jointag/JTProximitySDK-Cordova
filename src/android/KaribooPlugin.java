@@ -30,7 +30,7 @@ public class KaribooPlugin extends CordovaPlugin {
             if (action.equals("getPreferences")) {
                 this.getPreferences(callbackContext);
                 return true;
-            }else if (action.equals("setIABConsentCMPPresent")) {
+            } else if (action.equals("setIABConsentCMPPresent")) {
                 setIABConsentCMPPresent(args.getString(0));
                 return true;
             } else if (action.equals("setIABConsentSubjectToGDPR")) {
@@ -45,6 +45,12 @@ public class KaribooPlugin extends CordovaPlugin {
             } else if (action.equals("setIABConsentParsedVendorConsents")) {
                 setIABConsentParsedVendorConsents(args.getString(0));
                 return true;
+            } else if (action.equals("getLocationPermission")) {
+                this.getLocationPermission(callbackContext);
+                return true;
+            } else if (action.equals("requestLocationPermission")) {
+                this.requestLocationPermission();
+                return true;
             }
             return false;
         } catch (JSONException e) {
@@ -57,6 +63,20 @@ public class KaribooPlugin extends CordovaPlugin {
         String installationId = null;
         installationId = ProximitySDK.getInstance().getInstallationId();
         callbackContext.success(installationId);
+    }
+	
+    private void getLocationPermission(CallbackContext callbackContext) {
+		if (cordova.hasPermission(ACCESS_FINE_LOCATION)) {
+			callbackContext.success(1);
+		} else {
+			callbackContext.success(0);
+		}	
+    }
+	
+    private void requestLocationPermission() {
+		if (!cordova.hasPermission(ACCESS_FINE_LOCATION)) {
+			cordova.requestPermission(this, ACCESS_FINE_LOCATION_REQ_CODE, ACCESS_FINE_LOCATION);
+		}
     }
 
     private void getPreferences(CallbackContext callbackContext){
@@ -109,9 +129,9 @@ public class KaribooPlugin extends CordovaPlugin {
         Logger.setTag("JointagProximitySDK.");
         Logger.setLogLevel(Logger.VERBOSE);
         Logger.d("initialize Kariboo Plugin");
-        if (!cordova.hasPermission(ACCESS_FINE_LOCATION)) {
+        /*if (!cordova.hasPermission(ACCESS_FINE_LOCATION)) {
             getAccessFineLocationPermission(ACCESS_FINE_LOCATION_REQ_CODE);
-        }
+        }*/
 
         if (cordova.getActivity().getString(cordova.getActivity().getResources().getIdentifier("enable_cmp", "string", cordova.getActivity().getPackageName())) == "true") {
             Logger.d("enable cmp");
@@ -123,7 +143,6 @@ public class KaribooPlugin extends CordovaPlugin {
         String apiSecret = "@KARIBOO_SECRET@";
         ProximitySDK.init(cordova.getActivity().getApplication(), apiKey, apiSecret);
     }
-
 
     private void getAccessFineLocationPermission(int requestCode) {
         cordova.requestPermission(this, requestCode, ACCESS_FINE_LOCATION);
