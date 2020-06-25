@@ -4,6 +4,7 @@ import android.Manifest;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.preference.PreferenceManager;
+import android.os.Build;
 
 import com.jointag.proximity.ProximitySDK;
 import com.jointag.proximity.util.Logger;
@@ -18,6 +19,7 @@ import org.json.JSONObject;
 
 public class KaribooPlugin extends CordovaPlugin {
     public static final int ACCESS_FINE_LOCATION_REQ_CODE = 0;
+	public static final int ACCESS_BACKGROUND_LOCATION_REQ_CODE = 1;
     public static final String ACCESS_FINE_LOCATION = Manifest.permission.ACCESS_FINE_LOCATION;
 
     @Override
@@ -45,9 +47,6 @@ public class KaribooPlugin extends CordovaPlugin {
             } else if (action.equals("setIABConsentParsedVendorConsents")) {
                 setIABConsentParsedVendorConsents(args.getString(0));
                 return true;
-            } else if (action.equals("getLocationPermission")) {
-                this.getLocationPermission(callbackContext);
-                return true;
             } else if (action.equals("requestLocationPermission")) {
                 this.requestLocationPermission();
                 return true;
@@ -63,14 +62,6 @@ public class KaribooPlugin extends CordovaPlugin {
         String installationId = null;
         installationId = ProximitySDK.getInstance().getInstallationId();
         callbackContext.success(installationId);
-    }
-	
-    private void getLocationPermission(CallbackContext callbackContext) {
-		if (cordova.hasPermission(ACCESS_FINE_LOCATION)) {
-			callbackContext.success(1);
-		} else {
-			callbackContext.success(0);
-		}	
     }
 	
     private void requestLocationPermission() {
@@ -90,7 +81,6 @@ public class KaribooPlugin extends CordovaPlugin {
             updatePreferencesWithBoolean("IABConsent_CMPPresent", false);
         }
     }
-
 
     private void setIABConsentSubjectToGDPR(String iABConsentSubjectToGDPR) {
         updatePreferencesWithString("IABConsent_SubjectToGDPR", iABConsentSubjectToGDPR);
@@ -149,8 +139,10 @@ public class KaribooPlugin extends CordovaPlugin {
     }
 
     @Override
-    public void onRequestPermissionResult(int requestCode, String[] permissions,
-                                          int[] grantResults) {
+    public void onRequestPermissionResult(int requestCode, String[] permissions, int[] grantResults) {	
+		if (Build.VERSION.SDK_INT >= 29) {
+			cordova.requestPermission(this, ACCESS_BACKGROUND_LOCATION_REQ_CODE, "android.permission.ACCESS_BACKGROUND_LOCATION");
+		}
         if (requestCode == ACCESS_FINE_LOCATION_REQ_CODE && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
             ProximitySDK.getInstance().checkPendingPermissions();
         }
