@@ -31,8 +31,3 @@ exports.setIABConsentParsedVendorConsents = function(iABConsentParsedVendorConse
 exports.requestLocationPermission = function(success, error) {
     exec(success, error, "KaribooPlugin", "requestLocationPermission", []);
 };
-
-exports.getLocationPermission = function(success, error) {
-    exec(success, error, "KaribooPlugin", "getLocationPermission", []);
-};
-

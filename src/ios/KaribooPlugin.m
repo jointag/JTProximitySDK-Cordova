@@ -20,7 +20,6 @@
 - (void)setIABConsentParsedVendorConsents:(CDVInvokedUrlCommand*)command;
 - (void)getPreferences:(CDVInvokedUrlCommand*)command;
 - (void)requestLocationPermission:(CDVInvokedUrlCommand*)command;
-- (void)getLocationPermission:(CDVInvokedUrlCommand*)command;
 @end
 
 @implementation KaribooPlugin
@@ -62,9 +61,6 @@ NSDictionary *launchOptions;
 
 - (void)requestLocationPermission:(CDVInvokedUrlCommand*)command {
 	[[JTProximitySDK sharedInstance] requestLocationAuthorization];	
-}
-
-- (void)getLocationPermission:(CDVInvokedUrlCommand*)command {
 }
 
 - (void)getPreferences:(CDVInvokedUrlCommand*)command {
