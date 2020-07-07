@@ -43,13 +43,14 @@ Kariboo.requestLocationPermission();
 ### Cordova requirements
 
 Cordova CLI version: from `7.0.1` to  `8.1.2`
+
 ### Android requrements
 
 Minimum cordova-android version: `8.0.0`
 Minimum API level: `14` (Android 4.0)
 > **Note**: to use functionalities that rely on BLE, the minimum API level is `18` (Android 4.3). If the device API level is between `14` and `17` the SDK won't be able to access BLE and therefore it will be not possible to obtain data from BLE devices.
 
-### iOS requirements
+### iOS requirements
 
 Minimum cordova-ios version: `5.0.1`
 
@@ -73,11 +74,13 @@ In order to publish your app on App Store without rejection customize permission
             </string>
         </config-file>
   ```
-##Initialization
+
+## Initialization
 
 This plugin takes advantage of Cordova plugin onload phase to initialize Kariboo native SDK, thus no explicit initialization is required.
 
-##GDPR
+## GDPR
+
 As a publisher, you should integrate a Consent Management Platform (CMP) and request for vendor and purpose consents as outlined in IAB Europe’s Mobile In-App CMP API v1.0: Transparency & Consent Framework.
 To ensure that the SDK support the handling of user-consent preferences when a IAB-compatible CMP library is present, you must enable the feature through the `ENABLE_CMP` installation variable parameter, 
 that expects "true" or "false" value. The default value is true.
