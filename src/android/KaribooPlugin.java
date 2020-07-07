@@ -4,6 +4,7 @@ import android.Manifest;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.preference.PreferenceManager;
+import android.os.Build;
 
 import com.jointag.proximity.ProximitySDK;
 import com.jointag.proximity.util.Logger;
@@ -18,6 +19,7 @@ import org.json.JSONObject;
 
 public class KaribooPlugin extends CordovaPlugin {
     public static final int ACCESS_FINE_LOCATION_REQ_CODE = 0;
+	public static final int ACCESS_BACKGROUND_LOCATION_REQ_CODE = 1;
     public static final String ACCESS_FINE_LOCATION = Manifest.permission.ACCESS_FINE_LOCATION;
 
     @Override
@@ -30,7 +32,7 @@ public class KaribooPlugin extends CordovaPlugin {
             if (action.equals("getPreferences")) {
                 this.getPreferences(callbackContext);
                 return true;
-            }else if (action.equals("setIABConsentCMPPresent")) {
+            } else if (action.equals("setIABConsentCMPPresent")) {
                 setIABConsentCMPPresent(args.getString(0));
                 return true;
             } else if (action.equals("setIABConsentSubjectToGDPR")) {
@@ -45,6 +47,9 @@ public class KaribooPlugin extends CordovaPlugin {
             } else if (action.equals("setIABConsentParsedVendorConsents")) {
                 setIABConsentParsedVendorConsents(args.getString(0));
                 return true;
+            } else if (action.equals("requestLocationPermission")) {
+                this.requestLocationPermission();
+                return true;
             }
             return false;
         } catch (JSONException e) {
@@ -58,6 +63,12 @@ public class KaribooPlugin extends CordovaPlugin {
         installationId = ProximitySDK.getInstance().getInstallationId();
         callbackContext.success(installationId);
     }
+	
+    private void requestLocationPermission() {
+		if (!cordova.hasPermission(ACCESS_FINE_LOCATION)) {
+			cordova.requestPermission(this, ACCESS_FINE_LOCATION_REQ_CODE, ACCESS_FINE_LOCATION);
+		}
+    }
 
     private void getPreferences(CallbackContext callbackContext){
         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(cordova.getContext());
@@ -70,7 +81,6 @@ public class KaribooPlugin extends CordovaPlugin {
             updatePreferencesWithBoolean("IABConsent_CMPPresent", false);
         }
     }
-
 
     private void setIABConsentSubjectToGDPR(String iABConsentSubjectToGDPR) {
         updatePreferencesWithString("IABConsent_SubjectToGDPR", iABConsentSubjectToGDPR);
@@ -109,9 +119,9 @@ public class KaribooPlugin extends CordovaPlugin {
         Logger.setTag("JointagProximitySDK.");
         Logger.setLogLevel(Logger.VERBOSE);
         Logger.d("initialize Kariboo Plugin");
-        if (!cordova.hasPermission(ACCESS_FINE_LOCATION)) {
+        /*if (!cordova.hasPermission(ACCESS_FINE_LOCATION)) {
             getAccessFineLocationPermission(ACCESS_FINE_LOCATION_REQ_CODE);
-        }
+        }*/
 
         if (cordova.getActivity().getString(cordova.getActivity().getResources().getIdentifier("enable_cmp", "string", cordova.getActivity().getPackageName())) == "true") {
             Logger.d("enable cmp");
@@ -124,14 +134,15 @@ public class KaribooPlugin extends CordovaPlugin {
         ProximitySDK.init(cordova.getActivity().getApplication(), apiKey, apiSecret);
     }
 
-
     private void getAccessFineLocationPermission(int requestCode) {
         cordova.requestPermission(this, requestCode, ACCESS_FINE_LOCATION);
     }
 
     @Override
-    public void onRequestPermissionResult(int requestCode, String[] permissions,
-                                          int[] grantResults) {
+    public void onRequestPermissionResult(int requestCode, String[] permissions, int[] grantResults) {	
+		if (Build.VERSION.SDK_INT >= 29) {
+			cordova.requestPermission(this, ACCESS_BACKGROUND_LOCATION_REQ_CODE, "android.permission.ACCESS_BACKGROUND_LOCATION");
+		}
         if (requestCode == ACCESS_FINE_LOCATION_REQ_CODE && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
             ProximitySDK.getInstance().checkPendingPermissions();
         }

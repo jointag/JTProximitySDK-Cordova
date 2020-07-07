@@ -19,6 +19,7 @@
 - (void)setIABConsentParsedPurposeConsents:(CDVInvokedUrlCommand*)command;
 - (void)setIABConsentParsedVendorConsents:(CDVInvokedUrlCommand*)command;
 - (void)getPreferences:(CDVInvokedUrlCommand*)command;
+- (void)requestLocationPermission:(CDVInvokedUrlCommand*)command;
 @end
 
 @implementation KaribooPlugin
@@ -41,6 +42,7 @@ NSDictionary *launchOptions;
     }
     if (apiKey != nil && [apiKey length] > 0 && apiSecret != nil && [apiSecret length] > 0) {
         [[JTProximitySDK sharedInstance] setLogLevel:JTPLogLevelVerbose];
+		[[JTProximitySDK sharedInstance] setPromptForLocationAuthorization:NO];
         [[JTProximitySDK sharedInstance] initWithLaunchOptions:self.launchOptions apiKey:apiKey apiSecret:apiSecret];
         if (@available(iOS 10.0, *)) {
             [UNUserNotificationCenter currentNotificationCenter].delegate = self;
@@ -57,6 +59,9 @@ NSDictionary *launchOptions;
     [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
 }
 
+- (void)requestLocationPermission:(CDVInvokedUrlCommand*)command {
+	[[JTProximitySDK sharedInstance] requestLocationAuthorization];	
+}
 
 - (void)getPreferences:(CDVInvokedUrlCommand*)command {
     CDVPluginResult* pluginResult = nil;

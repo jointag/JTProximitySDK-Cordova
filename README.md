@@ -21,7 +21,7 @@ $ cordova plugin add @jointag/cordova-plugin-jointag-proximity --save --variable
 If you need to change your `KARIBOO_ID` or `KARIBOO_SECRET` after installation of the plugin, it's recommended that you remove and then re-add the plugin as above.
 Note that changes to the `KARIBOO_ID` or `KARIBOO_SECRET` value in your `config.xml` file will *not* be propagated to the individual platform builds.
 
-### Tracking users
+### Tracking users
 
 The SDK associates each tracked request with the *advertisingId*. If the *advertisingId* is not available due to a user permission denial, the device can be identified by the *installationId*. The *installationId* identifies in particular a specific installation of the SDK in a certain app on a certain device. If the app containing the SDK is uninstalled and then installed again the *installationId* will be a different one. You can retrieve the *installationId* after the initialization of the SDK anywhere in your code with the following line:
 
@@ -29,6 +29,13 @@ The SDK associates each tracked request with the *advertisingId*. If the *advert
 Kariboo.getInstallationId(function (value) {
   alert("installationId: " + value);
 });
+```
+
+### Request permissions
+The app is initialized **without any permission**. It is necessary to implement it in the project with the following call
+
+```javascript
+Kariboo.requestLocationPermission();
 ```
 
 ## Requirements and compatibility
