@@ -43,7 +43,7 @@
             <string>$ENABLE_CMP</string>
         </config-file>
         <source-file src="src/ios/KaribooPlugin.m"/>
-        <framework src="JTProximitySDK" type="podspec" spec="~> 1.9.0"/>
+        <framework src="JTProximitySDK" type="podspec" spec="~> 1.12.0"/>
     </platform>
     <platform name="android">
         <config-file parent="/*" target="res/xml/config.xml">
